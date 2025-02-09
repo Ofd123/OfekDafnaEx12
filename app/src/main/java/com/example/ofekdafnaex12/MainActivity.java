@@ -1,10 +1,13 @@
 package com.example.ofekdafnaex12;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity
     //----------------------------------------------------------------------------------------------
 
     /**
-     * reset button
+     * reset button - resets the screen background back to white
      * @param view
      */
     public void button3Click(View view)
@@ -130,18 +133,50 @@ public class MainActivity extends AppCompatActivity
     //----------------------------------------------------------------------------------------------
 
     /**
-     *
+     * shows an alert dialog which will get the user's text and will show it as a toast
      * @param view
      */
     public void button4Click(View view)
     {
+        ab4.setCancelable(false);
+        ab4.setTitle("write something");
+        EditText textInAd = new EditText(this);
+        textInAd.setHint("(write here)");
+        ab4.setView(textInAd);
+        ab4.setPositiveButton("Exit", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.cancel();
+            }
+        });
+        ab4.setNegativeButton("send", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                String text = textInAd.getText().toString();
 
+                if(!(text.equals("")))
+                {
+                    Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        AlertDialog dialog = ab4.create();
+        dialog.show();
     }
     //----------------------------------------------------------------------------------------------
 
+    /**
+     * moves the user to the credits screen
+     * @param view
+     */
     public void seeCredits(View view)
     {
-
+        Intent intent = new Intent(this,credits.class);
     }
     //----------------------------------------------------------------------------------------------
 }
