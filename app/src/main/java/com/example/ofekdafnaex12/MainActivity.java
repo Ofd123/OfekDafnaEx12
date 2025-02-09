@@ -6,21 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
 {
 
-    AlertDialog.Builder ab1,ab2,ab3,ab4;//last time i gave them long names which confused me... since we have 4 buttons i think it will be easier that way
+    AlertDialog.Builder ab1,ab2,ab4;//last time i gave them long names which confused me... since we have 4 buttons i think it will be easier that way
     LinearLayout main;
-    Random rnd;
+
+    final String[] colors = {"RED", "GREEN", "BLUE"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,10 +27,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         main = findViewById(R.id.main);
-        rnd = new Random();
         ab1 = new AlertDialog.Builder(this);        //first button
         ab2 = new AlertDialog.Builder(this);        // second button
-        ab3 = new AlertDialog.Builder(this);        // third button
         ab4 = new AlertDialog.Builder(this);        // fourth button
 
     }
@@ -43,51 +39,103 @@ public class MainActivity extends AppCompatActivity
      */
     public void button1Click(View view)
     {
-        ab1.setTitle("choose background");
-        ab1.setMessage("choose your background color:");
-        ab1.setNegativeButton("blue", new DialogInterface.OnClickListener()
+        ab1.setCancelable(false);
+
+        int[] color = new int[] {0, 0, 0};
+        ab1.setTitle("choose background color:");
+        ab1.setItems(colors, new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                main.setBackgroundColor(Color.BLUE);
+                color[which] = 255;
+                main.setBackgroundColor(Color.rgb(color[0], color[1], color[2]));
+            }
+        });
+        ab1.setPositiveButton("Exit", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int i)
+            {
                 dialog.cancel();
             }
         });
-        //------------------------------------------------------------------------------------------
-        ab1.setPositiveButton("red", new DialogInterface.OnClickListener()
+
+        AlertDialog ad = ab1.create();
+        ad.show();
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * the function opens the dialog which lets the user select the background color
+     * @param view
+     */
+    public void button2Click(View view)
+    {
+
+        ab2.setCancelable(false);
+
+        int[] color = new int[] {0, 0, 0};
+
+        ab2.setTitle("Change multiple colors");
+        ab2.setMultiChoiceItems(colors, null, new DialogInterface.OnMultiChoiceClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked)
+            {
+                if(isChecked)
+                {
+                    color[which] = 255;
+                }
+                else if (color[which] == 255)
+                {
+                    color[which] = 0;
+                }
+            }
+        });
+
+        ab2.setPositiveButton("Exit", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int i)
+            {
+                dialog.cancel();
+            }
+        });
+
+        ab2.setNeutralButton("OK", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                main.setBackgroundColor(Color.RED);
-                dialog.cancel();
+                main.setBackgroundColor(Color.rgb(color[0], color[1], color[2]));
             }
         });
-        //------------------------------------------------------------------------------------------
-        ab1.setNeutralButton("yellow", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                main.setBackgroundColor(Color.YELLOW);
-                dialog.cancel();
-            }
-        });
-        //------------------------------------------------------------------------------------------
-        AlertDialog showText = ab1.create();
-        showText.show();
+
+        AlertDialog dialog = ab2.create();
+        dialog.show();
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    /**
+     * reset button
+     * @param view
+     */
+    public void button3Click(View view)
+    {
+        main.setBackgroundColor(Color.WHITE);
     }
     //----------------------------------------------------------------------------------------------
 
-    public void button2Click(View view) {
-    }
-    //----------------------------------------------------------------------------------------------
+    /**
+     *
+     * @param view
+     */
+    public void button4Click(View view)
+    {
 
-    public void button3Click(View view) {
-    }
-    //----------------------------------------------------------------------------------------------
-
-    public void button4Click(View view) {
     }
     //----------------------------------------------------------------------------------------------
 
